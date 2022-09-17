@@ -2,9 +2,9 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
-        <q-toolbar-title> Quasar App </q-toolbar-title>
+        <q-toolbar-title> Pokedex by Arie Aldiansyah </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <div>Poke v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
     <q-page-container>

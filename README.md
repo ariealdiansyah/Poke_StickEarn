@@ -1,4 +1,4 @@
-# A Project For Jublia (jublia-test)
+# A Project For Pokedex Test (pokedex-test)
 
 A Quasar Project
 

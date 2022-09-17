@@ -11,6 +11,7 @@ export const getListData = async ({ dispatch, commit }, last) => {
         listPoke.push(resp);
       }
     }
+    commit('setListPokemon', listPoke);
     return listPoke;
   } catch (error) {
     console.error(error);
@@ -28,18 +29,36 @@ export const getDetailPokemon = async ({ }, name) => {
   }
 };
 
-export const getDataByType = async ({ dispatch, commit }, type) => {
+export const getDataByType = async ({ state, commit, dispatch }, { type, last }) => {
   try {
     const res = await PokeServices.getDataByType(type);
-    console.log(res.pokemon);
+    commit('setTempListPokemon', res);
     let listPoke = [];
-    for (let i = 0; i < res.pokemon.length; i++) {
-      const resp = await dispatch('getDetailPokemon', res.pokemon[i].pokemon.name);
+    for (let i = 0; i < 7; i++) {
+      const resp = await dispatch('getDetailPokemon', state.tempList[last + i].name);
       if (resp) {
         listPoke.push(resp);
       }
     }
-    return { listPoke: listPoke, max: res.pokemon.length };
+    commit('setListPokemon', listPoke);
+    return;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const getDataByType2 = async ({ state, commit, dispatch }, { last }) => {
+  try {
+    let listPoke = [];
+    for (let i = 0; i < 7; i++) {
+      const resp = await dispatch('getDetailPokemon', state.tempList[last + i].name);
+      if (resp) {
+        listPoke.push(resp);
+      }
+    }
+    commit('setListPokemon', listPoke);
+    return;
   } catch (error) {
     console.error(error);
     throw error;

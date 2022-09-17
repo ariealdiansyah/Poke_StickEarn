@@ -144,6 +144,7 @@ module.exports = configure(function (ctx) {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {}, // only for GenerateSW
 
+
       // for the custom service worker ONLY (/src-pwa/custom-service-worker.[js|ts])
       // if using workbox in InjectManifest mode
 
@@ -154,8 +155,8 @@ module.exports = configure(function (ctx) {
 
 
       manifest: {
-        name: `A Project For Jublia`,
-        short_name: `A Project For Jublia`,
+        name: `A Project For Pokedex Test`,
+        short_name: `A Project For Pokedex Test`,
         description: `A Quasar Project`,
         display: 'standalone',
         orientation: 'portrait',
@@ -221,7 +222,7 @@ module.exports = configure(function (ctx) {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: 'jublia-test'
+        appId: 'pokedex-test'
       },
 
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain

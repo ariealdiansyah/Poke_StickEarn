@@ -15,3 +15,11 @@ export const adapterPokemon = (val) => {
     height: val.height
   }
 }
+
+export const adapterType = (val) => {
+  const list = val.pokemon.map((x) => {
+    return x.pokemon
+  })
+
+  return list
+}

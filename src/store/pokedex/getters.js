@@ -1,7 +1,7 @@
-export const listPokemon = async (state) => {
+export const listPokemon = (state) => {
   return state.listPokemon
 }
 
-export const max = async (state) => {
+export const max = (state) => {
   return state.maxCount
 }

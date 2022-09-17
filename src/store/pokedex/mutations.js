@@ -6,13 +6,21 @@ const getNewArray = (index, array) => {
   return a;
 };
 
-export const setListPokemon = async (state, payload) => {
+export const setListPokemon = (state, payload) => {
   let list = state.listPokemon;
   const last = list.length;
   list.push(...getNewArray(last + 1, payload));
   state.listPokemon = list;
 };
 
-export const maxCount = async (state, payload) => {
+export const maxCount = (state, payload) => {
   state.maxCount = payload;
 };
+
+export const setTempListPokemon = (state, payload) => {
+  state.tempList = payload
+}
+
+export const resetList = (state) => {
+  state.listPokemon = []
+}

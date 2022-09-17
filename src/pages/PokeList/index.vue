@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue';
+import { ref, computed, toRef } from 'vue';
 import { useStore } from 'vuex';
 import { Loading, QSpinnerFacebook } from 'quasar';
 
@@ -89,7 +89,6 @@ export default {
   name: 'PokeListView',
   setup() {
     const store = useStore();
-    const items = ref([]);
     const max = ref(0);
     const type = ref('');
     const optionsType = ref([
@@ -171,28 +170,37 @@ export default {
       },
     ]);
 
-    const getNewArray = (index, array) => {
-      const a = [];
-      for (let i = 0; i < array.length; i++) {
-        a.push(array[i]);
-      }
-      return a;
-    };
+    const items = computed(() => store.getters['pokedex/listPokemon']);
+    const maxTemp = computed(() => store.state.pokedex.tempList.length);
 
     const changeDataByType = async () => {
+      const last = 0;
+      store.commit('pokedex/resetList');
+      console.log('on tipe', max.value, last);
       Loading.show({
         spinner: QSpinnerFacebook,
         spinnerColor: 'primary',
-        message: 'Sedang Dalam Proses Synchronisasi',
+        message: 'Sedang Menangkap Pokemon',
       });
-      console.log('on tipe', max.value, items.value.length);
-      const res = await store.dispatch('pokedex/getDataByType', type.value);
-      if (res) {
-        items.value = res.listPoke;
-        max.value = res.max;
-        Loading.hide();
-      }
-      console.log('on tipe 2', max.value, items.value.length);
+      await store.dispatch('pokedex/getDataByType', {
+        type: type.value,
+        last: last,
+      });
+      Loading.hide();
+    };
+
+    const changeDataByType2 = async () => {
+      const last = items.value.length;
+      console.log(last);
+      Loading.show({
+        spinner: QSpinnerFacebook,
+        spinnerColor: 'primary',
+        message: 'Sedang Menangkap Pokemon',
+      });
+      await store.dispatch('pokedex/getDataByType2', {
+        last: last,
+      });
+      Loading.hide();
     };
 
     const getIcon = (val) => {
@@ -238,24 +246,24 @@ export default {
     return {
       items,
       changeDataByType,
+      changeDataByType2,
       getIcon,
       type,
       optionsType,
       async onLoad(index, done) {
         const last = items.value.length;
+        console.log('last', last);
         if ((last < max.value || max.value === 0) && index > 0) {
-          console.log('last under max', max.value, last);
           try {
             if (type.value === '') {
               max.value = 1154;
-              const res = await store.dispatch('pokedex/getListData', last);
-              if (res) {
-                items.value.push(...getNewArray(last + 1, res));
-              }
+              await store.dispatch('pokedex/getListData', last);
               done();
             } else {
-              changeDataByType();
-              // done((stop = true));
+              max.value = maxTemp.value;
+              await store.dispatch('pokedex/getDataByType2', {
+                last: last,
+              });
               done();
             }
           } catch (error) {

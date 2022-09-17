@@ -1,5 +1,5 @@
 import { api } from 'src/boot/axios';
-import { adapterPokemon } from './adapter';
+import { adapterPokemon, adapterType } from './adapter';
 
 export default {
   async getList(starts) {
@@ -11,6 +11,6 @@ export default {
   },
   async getDataByType(type) {
     const res = await api.get(`https://pokeapi.co/api/v2/type/${type}`);
-    return res.data;
+    return adapterType(res.data);
   },
 };

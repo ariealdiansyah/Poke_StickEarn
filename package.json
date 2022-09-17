@@ -1,8 +1,8 @@
 {
-  "name": "jublia-test",
+  "name": "pokedex-test",
   "version": "0.0.1",
   "description": "A Quasar Project",
-  "productName": "A Project For Jublia",
+  "productName": "A Project For Pokedex Test",
   "author": "ariealdiansyah <ariealdiansyah98@gmail.com>",
   "private": true,
   "scripts": {
