@@ -6,13 +6,21 @@ export const adapterPokemon = (val) => {
     return x.ability.name
   })
 
+  const stats = val.stats.map((x) => {
+    return {
+      base_stats: x.base_stat,
+      name_stats: x.stat.name
+    }
+  })
+
   return {
     types: types,
     abilities: abilities,
     pic: val.sprites.front_default,
     name: val.name,
     weight: val.weight,
-    height: val.height
+    height: val.height,
+    stats: stats
   }
 }
 

@@ -71,6 +71,18 @@
                 <div class="row">
                   <span>Height : {{ item.height }}</span>
                 </div>
+                <div class="row q-mt-sm">
+                  <q-btn
+                    color="primary"
+                    size="md"
+                    outline
+                    no-caps
+                    rounded
+                    icon-right="info"
+                    label="View Details"
+                    @click="goDetail(item.name)"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -83,12 +95,14 @@
 <script>
 import { ref, computed, toRef } from 'vue';
 import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 import { Loading, QSpinnerFacebook } from 'quasar';
 
 export default {
   name: 'PokeListView',
   setup() {
     const store = useStore();
+    const router = useRouter();
     const max = ref(0);
     const type = ref('');
     const optionsType = ref([
@@ -176,7 +190,6 @@ export default {
     const changeDataByType = async () => {
       const last = 0;
       store.commit('pokedex/resetList');
-      console.log('on tipe', max.value, last);
       Loading.show({
         spinner: QSpinnerFacebook,
         spinnerColor: 'primary',
@@ -191,7 +204,6 @@ export default {
 
     const changeDataByType2 = async () => {
       const last = items.value.length;
-      console.log(last);
       Loading.show({
         spinner: QSpinnerFacebook,
         spinnerColor: 'primary',
@@ -204,43 +216,11 @@ export default {
     };
 
     const getIcon = (val) => {
-      if (val === 'bug') {
-        return 'https://upload.wikimedia.org/wikipedia/commons/3/3c/Pok%C3%A9mon_Bug_Type_Icon.svg';
-      } else if (val === 'dark') {
-        return 'https://upload.wikimedia.org/wikipedia/commons/0/09/Pok%C3%A9mon_Dark_Type_Icon.svg';
-      } else if (val === 'grass') {
-        return 'https://upload.wikimedia.org/wikipedia/commons/f/f6/Pok%C3%A9mon_Grass_Type_Icon.svg';
-      } else if (val === 'dragon') {
-        return 'https://upload.wikimedia.org/wikipedia/commons/a/a6/Pok%C3%A9mon_Dragon_Type_Icon.svg';
-      } else if (val === 'electric') {
-        return 'https://upload.wikimedia.org/wikipedia/commons/a/a9/Pok%C3%A9mon_Electric_Type_Icon.svg';
-      } else if (val === 'fairy') {
-        return 'https://upload.wikimedia.org/wikipedia/commons/0/08/Pok%C3%A9mon_Fairy_Type_Icon.svg';
-      } else if (val === 'fighting') {
-        return 'https://upload.wikimedia.org/wikipedia/commons/b/be/Pok%C3%A9mon_Fighting_Type_Icon.svg';
-      } else if (val === 'fire') {
-        return 'https://upload.wikimedia.org/wikipedia/commons/5/56/Pok%C3%A9mon_Fire_Type_Icon.svg';
-      } else if (val === 'flying') {
-        return 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Pok%C3%A9mon_Flying_Type_Icon.svg';
-      } else if (val === 'ghost') {
-        return 'https://upload.wikimedia.org/wikipedia/commons/a/a0/Pok%C3%A9mon_Ghost_Type_Icon.svg';
-      } else if (val === 'ground') {
-        return 'https://upload.wikimedia.org/wikipedia/commons/8/8d/Pok%C3%A9mon_Ground_Type_Icon.svg';
-      } else if (val === 'ice') {
-        return 'https://upload.wikimedia.org/wikipedia/commons/8/88/Pok%C3%A9mon_Ice_Type_Icon.svg';
-      } else if (val === 'normal') {
-        return 'https://upload.wikimedia.org/wikipedia/commons/a/aa/Pok%C3%A9mon_Normal_Type_Icon.svg';
-      } else if (val === 'poison') {
-        return 'https://upload.wikimedia.org/wikipedia/commons/c/c4/Pok%C3%A9mon_Poison_Type_Icon.svg';
-      } else if (val === 'psychic') {
-        return 'https://upload.wikimedia.org/wikipedia/commons/a/ab/Pok%C3%A9mon_Psychic_Type_Icon.svg';
-      } else if (val === 'rock') {
-        return 'https://upload.wikimedia.org/wikipedia/commons/b/bb/Pok%C3%A9mon_Rock_Type_Icon.svg';
-      } else if (val === 'steel') {
-        return 'https://upload.wikimedia.org/wikipedia/commons/3/38/Pok%C3%A9mon_Steel_Type_Icon.svg';
-      } else if (val === 'water') {
-        return 'https://upload.wikimedia.org/wikipedia/commons/0/0b/Pok%C3%A9mon_Water_Type_Icon.svg';
-      }
+      return require(`assets/type/${val}.svg`);
+    };
+
+    const goDetail = (name) => {
+      router.push(`/detail/${name}`);
     };
 
     return {
@@ -248,11 +228,11 @@ export default {
       changeDataByType,
       changeDataByType2,
       getIcon,
+      goDetail,
       type,
       optionsType,
       async onLoad(index, done) {
         const last = items.value.length;
-        console.log('last', last);
         if ((last < max.value || max.value === 0) && index > 0) {
           try {
             if (type.value === '') {
@@ -270,7 +250,6 @@ export default {
             throw error;
           }
         } else {
-          console.log('should stop ', max.value, last);
           done((stop = true));
         }
       },
